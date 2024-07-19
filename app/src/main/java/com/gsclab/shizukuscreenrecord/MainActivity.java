@@ -1,9 +1,12 @@
 package com.gsclab.shizukuscreenrecord;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -15,8 +18,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.gsclab.shizukuscreenrecord.service.FileUpload;
 import com.gsclab.shizukuscreenrecord.service.ScreenRecorder;
 import com.gsclab.shizukuscreenrecord.util.ShizukuUtil;
+
+import java.io.File;
 
 import rikka.shizuku.Shizuku;
 
@@ -24,6 +30,13 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_BUTTON1 = 1;
     private static final int REQ_PERMISSION_PUSH = 2000;
+    private static final int REQ_PERMISSION_STORAGE = 3000;
+    private static final String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+
+//    private Button btnSend;
 
     private void onRequestPermissionsResult(int requestCode, int grantResult) {
         boolean granted = grantResult == PackageManager.PERMISSION_GRANTED;
@@ -44,7 +57,26 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.POST_NOTIFICATIONS},
                     REQ_PERMISSION_PUSH);
+
         }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            ActivityCompat.requestPermissions(this,
+                    PERMISSIONS_STORAGE,
+                    REQ_PERMISSION_STORAGE);
+            if(!Environment.isExternalStorageManager()){
+                Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                this.startActivity(intent);
+            }
+        }
+//1
+//        btnSend = findViewById(R.id.btnSend);
+//        btnSend.setOnClickListener(view -> {
+//            Intent intent = new Intent()
+//                    .setType("image/*")
+//                    .setAction(Intent.ACTION_GET_CONTENT);
+//        });
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -79,5 +111,29 @@ public class MainActivity extends AppCompatActivity {
         }
 
         ScreenRecorder.getInstance().stopRecordWithToast(this);
+    }
+
+    public void onClickSend(View v){
+        if(!ScreenRecorder.getInstance().isFilePresent()){
+            Toast.makeText(this, "Record File does not exist!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        try{
+            int permission = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+            if (permission != PackageManager.PERMISSION_GRANTED) {
+                // We don't have permission so prompt the user
+                ActivityCompat.requestPermissions(
+                        this,
+                        PERMISSIONS_STORAGE,
+                        REQ_PERMISSION_STORAGE
+                );
+            }
+            File recordFile = new File(Environment.getExternalStorageDirectory().getPath() + "/", ScreenRecorder.getInstance().getFileName());
+            FileUpload.send2Server(recordFile, "http://192.168.0.52:8080/upload");
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

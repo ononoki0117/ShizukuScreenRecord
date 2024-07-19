@@ -81,7 +81,7 @@
                 android:layout_width="178dp"
                 android:layout_height="64dp"
                 android:layout_marginStart="99dp"
-                android:layout_marginTop="204dp"
+                android:layout_marginTop="140dp"
                 android:ems="10"
                 android:hint="30"
                 android:inputType="number"
@@ -106,12 +106,14 @@
                 app:layout_constraintVertical_bias="1.0" />
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/btnSend"
                 android:layout_width="126dp"
                 android:layout_height="48dp"
-                android:layout_marginTop="28dp"
+                android:layout_marginTop="24dp"
+                android:onClick="onClickSend"
                 android:text="Send!"
                 app:layout_constraintEnd_toEndOf="@+id/button"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@+id/button"
                 app:layout_constraintTop_toBottomOf="@+id/button" />
 

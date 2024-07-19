@@ -35,6 +35,22 @@ public class ScreenRecorder {
 
     public int duration = 30;
 
+    private boolean filePresent = false;
+
+    public boolean isFilePresent(){
+        return filePresent;
+    }
+
+    private String fileName = "test.mp4";
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    private void setFileName(){
+
+    }
+
     private final String mDir = "/";
 
     private Thread recordThread;
@@ -42,16 +58,18 @@ public class ScreenRecorder {
 
     public void startRecord() {
 
-        String[] command = {"screenrecord", "--time-limit=" + duration, Environment.getExternalStorageDirectory().getPath() + '/' + "test.mp4"};
+        String[] command = {"screenrecord", "--time-limit=" + duration, Environment.getExternalStorageDirectory().getPath() + '/' + fileName};
 
         recordThread = new Thread(() -> {
             Log.d("recordThread", "record Thread loaded");
+            filePresent = false;
             ShizukuUtil.mProcess = Shizuku.newProcess(command, null, mDir);
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(ShizukuUtil.mProcess.getInputStream()));
 
             try {
                 reader.readLine();
+                filePresent = true;
             } catch (Exception e) {
                 Log.d("Thread Exception", Objects.requireNonNull(e.getMessage()));
             }

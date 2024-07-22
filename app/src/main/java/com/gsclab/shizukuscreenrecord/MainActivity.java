@@ -1,6 +1,7 @@
 package com.gsclab.shizukuscreenrecord;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -11,14 +12,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import com.gsclab.shizukuscreenrecord.service.FileUpload;
+import com.gsclab.shizukuscreenrecord.service.FileDownloader;
+import com.gsclab.shizukuscreenrecord.service.FileUploader;
 import com.gsclab.shizukuscreenrecord.service.ScreenRecorder;
 import com.gsclab.shizukuscreenrecord.util.ShizukuUtil;
 
@@ -26,7 +23,7 @@ import java.io.File;
 
 import rikka.shizuku.Shizuku;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     private static final int REQUEST_CODE_BUTTON1 = 1;
     private static final int REQ_PERMISSION_PUSH = 2000;
@@ -48,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
+        //EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
         Shizuku.addRequestPermissionResultListener(REQUEST_PERMISSION_RESULT_LISTENER);
@@ -64,25 +61,18 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this,
                     PERMISSIONS_STORAGE,
                     REQ_PERMISSION_STORAGE);
-            if(!Environment.isExternalStorageManager()){
+            if (!Environment.isExternalStorageManager()) {
                 Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
                 this.startActivity(intent);
             }
         }
-//1
-//        btnSend = findViewById(R.id.btnSend);
-//        btnSend.setOnClickListener(view -> {
-//            Intent intent = new Intent()
-//                    .setType("image/*")
-//                    .setAction(Intent.ACTION_GET_CONTENT);
+
+
+//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+//            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+//            return insets;
 //        });
-
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
     }
 
     @Override
@@ -113,12 +103,12 @@ public class MainActivity extends AppCompatActivity {
         ScreenRecorder.getInstance().stopRecordWithToast(this);
     }
 
-    public void onClickSend(View v){
-        if(!ScreenRecorder.getInstance().isFilePresent()){
+    public void onClickSend(View v) {
+        if (!ScreenRecorder.getInstance().isFilePresent()) {
             Toast.makeText(this, "Record File does not exist!", Toast.LENGTH_SHORT).show();
             return;
         }
-        try{
+        try {
             int permission = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
             if (permission != PackageManager.PERMISSION_GRANTED) {
@@ -130,9 +120,27 @@ public class MainActivity extends AppCompatActivity {
                 );
             }
             File recordFile = new File(Environment.getExternalStorageDirectory().getPath() + "/", ScreenRecorder.getInstance().getFileName());
-            FileUpload.send2Server(recordFile, "http://192.168.0.52:8080/upload");
+            FileUploader.send2Server(recordFile, "http://192.168.0.52:8080/api/file/upload");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        catch (Exception e){
+    }
+
+    public void onClickDownload(View v) {
+        try {
+            int permission = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+            if (permission != PackageManager.PERMISSION_GRANTED) {
+                // We don't have permission so prompt the user
+                ActivityCompat.requestPermissions(
+                        this,
+                        PERMISSIONS_STORAGE,
+                        REQ_PERMISSION_STORAGE
+                );
+            }
+            FileDownloader.getInstance().requestDownload("http://192.168.0.52:8080/api/file/download", "point_cloud.ply");
+        } catch (Exception e) {
+            Toast.makeText(this, "Download failed! \n " + e.getMessage(), Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
     }

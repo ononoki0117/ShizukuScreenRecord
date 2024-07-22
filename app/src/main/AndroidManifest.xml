@@ -27,9 +27,21 @@
         android:usesCleartextTraffic="true"
         android:requestLegacyExternalStorage="true"
         tools:targetApi="31">
+        <meta-data
+            android:name="com.oculus.intent.category.VR"
+            android:value="vr_only"/>
+        <meta-data
+            android:name="com.oculus.supportedDevices"
+            android:value="quest|quest2|questpro|quest3"/>
+
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+            android:configChanges="density|keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|uiMode"
+            android:launchMode="singleTask"
+            android:resizeableActivity="false">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

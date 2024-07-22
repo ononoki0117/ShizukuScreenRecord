@@ -1,10 +1,9 @@
 package com.gsclab.shizukuscreenrecord.service;
 
+import android.app.Activity;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.gsclab.shizukuscreenrecord.util.IToastNotify;
 import com.gsclab.shizukuscreenrecord.util.ShizukuUtil;
@@ -29,15 +28,15 @@ public class ScreenRecorder {
         return ScreenUtilHelper.INSTANCE;
     }
 
+    public int duration = 30;
+
     public static void setDuration(int duration) {
         ScreenUtilHelper.INSTANCE.duration = duration;
     }
 
-    public int duration = 30;
-
     private boolean filePresent = false;
 
-    public boolean isFilePresent(){
+    public boolean isFilePresent() {
         return filePresent;
     }
 
@@ -47,14 +46,15 @@ public class ScreenRecorder {
         return fileName;
     }
 
-    private void setFileName(){
-
+    private void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     private final String mDir = "/";
 
     private Thread recordThread;
-    Timer recordTimer = new Timer();
+
+    private final Timer recordTimer = new Timer();
 
     public void startRecord() {
 
@@ -79,16 +79,11 @@ public class ScreenRecorder {
         recordThread.start();
     }
 
-    public void startRecordWithToast(AppCompatActivity activity) {
+    public void startRecordWithToast(Activity activity) {
         Toast.makeText(activity, "Record Started", Toast.LENGTH_LONG).show();
         startRecord();
 
-        IToastNotify notifyEnd = () -> activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(activity, "Record End!", Toast.LENGTH_LONG).show();
-            }
-        });
+        IToastNotify notifyEnd = () -> activity.runOnUiThread(() -> Toast.makeText(activity, "Record End!", Toast.LENGTH_LONG).show());
 
         TimerTask task = new TimerTask() {
             @Override
@@ -99,7 +94,7 @@ public class ScreenRecorder {
         recordTimer.schedule(task, duration * 1000L);
     }
 
-    public void stopRecordWithToast(AppCompatActivity activity) {
+    public void stopRecordWithToast(Activity activity) {
         try {
             assert ShizukuUtil.mProcess != null;
 
@@ -110,7 +105,7 @@ public class ScreenRecorder {
             Toast.makeText(activity, "Record Stopped", Toast.LENGTH_LONG).show();
         } catch (AssertionError e) {
             Toast.makeText(activity, "Record not running", Toast.LENGTH_LONG).show();
-        } catch (RuntimeException e){
+        } catch (RuntimeException e) {
             Toast.makeText(activity, "RuntimeException!", Toast.LENGTH_LONG).show();
         }
     }

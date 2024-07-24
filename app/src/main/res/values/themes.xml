@@ -6,4 +6,13 @@
     </style>
 
     <style name="Theme.ShizukuScreenRecord" parent="Base.Theme.ShizukuScreenRecord" />
+
+    <style name="Theme.ShizukuScreenRecord.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.ShizukuScreenRecord.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.ShizukuScreenRecord.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

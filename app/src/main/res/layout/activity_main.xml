@@ -1,70 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-
-
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="@android:color/transparent"
+    >
 
-    <Space
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+
         android:layout_width="match_parent"
-        android:layout_height="79dp" />
+        android:layout_height="192dp">
 
-    <LinearLayout
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+
+            app:toolbarId="@+id/toolbar">
+
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize">
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="91dp"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
 
-        <EditText
-            android:id="@+id/editTextText"
-            android:layout_width="wrap_content"
-            android:layout_height="81dp"
-            android:layout_weight="1"
-            android:ems="10"
-            android:inputType="text"
-            android:text="Name" />
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="sec" />
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-    </LinearLayout>
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="69dp" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/btnRecord"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="onClickRecord"
-        android:text="Record" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btnStop"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="onClickStop"
-        android:text="Stop" />
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10sp"
+                    android:text="촬영 시간"
+                    android:textSize="40sp" />
 
-    <Button
-        android:id="@+id/btnSend"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="onClickSend"
-        android:text="Send" />
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20sp" />
 
-    <Button
-        android:id="@+id/btnDownload"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="onClickDownload"
-        android:text="Download" />
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-</LinearLayout>
+                    <RadioButton
+                        android:id="@+id/radioDuration30"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="30초"
+                        android:textSize="24sp" />
+
+                    <RadioButton
+                        android:id="@+id/radioDuration20"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="20초"
+                        android:textSize="24sp" />
+
+                    <RadioButton
+                        android:id="@+id/radioDuration10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="10초"
+                        android:textSize="24sp" />
+
+                </RadioGroup>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40sp" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10sp"
+                    android:text="변환 퀄리티"
+                    android:textSize="40sp" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20sp" />
+
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <RadioButton
+                        android:id="@+id/radioQualityHigh"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="High"
+                        android:textSize="24sp" />
+
+                    <RadioButton
+                        android:id="@+id/radioQualityMiddle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Middle"
+                        android:textSize="24sp" />
+
+                    <RadioButton
+                        android:id="@+id/radioQualityLow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Low"
+                        android:textSize="24sp" />
+
+                </RadioGroup>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40sp" />
+
+                <Button
+                    android:id="@+id/button"
+                    style="?android:borderlessButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Button"
+                    android:textColor="?android:colorAccent" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

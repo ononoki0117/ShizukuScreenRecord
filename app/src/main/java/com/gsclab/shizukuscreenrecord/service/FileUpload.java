@@ -16,11 +16,11 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class FileUploader {
+public class FileUpload {
     public static void send2Server(File file, String url) {
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
-                .addFormDataPart("files", file.getName(), RequestBody.create(file, MultipartBody.FORM))
+                .addFormDataPart("files", file.getName(), RequestBody.create(MultipartBody.FORM, file))
                 .build();
 
         Request request = new Request.Builder()

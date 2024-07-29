@@ -29,6 +29,16 @@ public class ScreenRecorder {
         return ScreenUtilHelper.INSTANCE;
     }
 
+    public interface statusCallback{
+        void finishRecord(ScreenRecorder screenRecorder);
+    }
+
+    private statusCallback statusCallback = null;
+
+    public static void setStatusCallback(statusCallback callback){
+        ScreenUtilHelper.INSTANCE.statusCallback = callback;
+    }
+
     public static void setDuration(int duration) {
         ScreenUtilHelper.INSTANCE.duration = duration;
     }
@@ -37,27 +47,27 @@ public class ScreenRecorder {
 
     private boolean filePresent = false;
 
-    public boolean isFilePresent(){
+    public boolean isFilePresent() {
         return filePresent;
     }
 
     private String fileName = "test.mp4";
 
-    public String getFileName() {
-        return fileName;
+    public static String getFileName() {
+        return ScreenUtilHelper.INSTANCE.fileName;
     }
 
-    private void setFileName(){
+    private void setFileName() {
 
     }
 
     private final String mDir = "/";
 
     private Thread recordThread;
+
     Timer recordTimer = new Timer();
 
     public void startRecord() {
-
         String[] command = {"screenrecord", "--time-limit=" + duration, Environment.getExternalStorageDirectory().getPath() + '/' + fileName};
 
         recordThread = new Thread(() -> {
@@ -72,6 +82,10 @@ public class ScreenRecorder {
                 filePresent = true;
             } catch (Exception e) {
                 Log.d("Thread Exception", Objects.requireNonNull(e.getMessage()));
+            }
+
+            if(statusCallback != null){
+                this.statusCallback.finishRecord(this);
             }
             Log.d("result", "Record Ended");
         });
@@ -110,7 +124,7 @@ public class ScreenRecorder {
             Toast.makeText(activity, "Record Stopped", Toast.LENGTH_LONG).show();
         } catch (AssertionError e) {
             Toast.makeText(activity, "Record not running", Toast.LENGTH_LONG).show();
-        } catch (RuntimeException e){
+        } catch (RuntimeException e) {
             Toast.makeText(activity, "RuntimeException!", Toast.LENGTH_LONG).show();
         }
     }

@@ -17,6 +17,14 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class FileUpload {
+    public static enum QUALITY{
+        HIGH,
+        MIDDLE,
+        LOW,
+    }
+
+    public static QUALITY quality = QUALITY.HIGH;
+
     public static void send2Server(File file, String url) {
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)

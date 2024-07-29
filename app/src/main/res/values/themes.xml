@@ -15,4 +15,6 @@
     <style name="Theme.ShizukuScreenRecord.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.ShizukuScreenRecord.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Theme.AppCompat.DayNight.NoActionBar" parent="android:Theme.Material.Light.NoActionBar" />
 </resources>

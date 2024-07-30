@@ -11,6 +11,8 @@ import com.gsclab.shizukuscreenrecord.util.ShizukuUtil;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -29,14 +31,14 @@ public class ScreenRecorder {
         return ScreenUtilHelper.INSTANCE;
     }
 
-    public interface statusCallback{
+    public interface StatusCallback {
         void finishRecord(ScreenRecorder screenRecorder);
     }
 
-    private statusCallback statusCallback = null;
+    private StatusCallback statusCallback = null;
 
-    public static void setStatusCallback(statusCallback callback){
-        ScreenUtilHelper.INSTANCE.statusCallback = callback;
+    public void setStatusCallback(StatusCallback callback){
+        this.statusCallback = callback;
     }
 
     public static void setDuration(int duration) {
@@ -58,16 +60,27 @@ public class ScreenRecorder {
     }
 
     private void setFileName() {
+        StringBuilder builder = new StringBuilder();
 
+        LocalDateTime localDateTime = LocalDateTime.now();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd.HH.mm");
+        builder.append(localDateTime.format(formatter))
+                .append(".mp4");
+
+        fileName = builder.toString();
     }
 
     private final String mDir = "/";
 
+    // 나중에 녹화 멈추는 방법을 찾으면 쓸려고 필드로 놔 둠
     private Thread recordThread;
 
     Timer recordTimer = new Timer();
 
     public void startRecord() {
+        setFileName();
+
         String[] command = {"screenrecord", "--time-limit=" + duration, Environment.getExternalStorageDirectory().getPath() + '/' + fileName};
 
         recordThread = new Thread(() -> {

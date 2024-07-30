@@ -31,13 +31,13 @@ public class RecordingActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if(isRecorded)
+        if (isRecorded)
             return;
 
         isRecorded = true;
 
-        TextView countDownText= (TextView) findViewById(R.id.countDownText);;
-        TextView descriptionText= (TextView) findViewById(R.id.recordDescriptionText);
+        TextView countDownText = (TextView) findViewById(R.id.countDownText);
+        TextView descriptionText = (TextView) findViewById(R.id.recordDescriptionText);
 
         descriptionText.setText("3초 뒤 녹화 시작");
 
@@ -65,17 +65,17 @@ public class RecordingActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
 
     }
 
-    private void startRecord(){
-        ScreenRecorder.setStatusCallback(screenRecorder -> changeActivity());
+    private void startRecord() {
+        ScreenRecorder.getInstance().setStatusCallback(screenRecorder -> changeActivity());
         ScreenRecorder.getInstance().startRecordWithToast(this);
     }
 
-    private void changeActivity(){
+    private void changeActivity() {
         Intent intent = new Intent(getApplicationContext(), LoadingActivity.class);
         finishAffinity();
         startActivity(intent);

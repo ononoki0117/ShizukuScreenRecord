@@ -109,4 +109,18 @@
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="title_activity_waiting">waitingActivity</string>
+
+    <!-- Loading Messages -->
+    <string name="loading_ready">업로드 준비 중…</string>
+    <string name="loading_upload_file_info">파일 정보 업로드 중…</string>
+    <string name="loading_upload_file">파일 업로드 중…</string>
+    <string name="loading_wait_4_processing">3D 모델 생성 중…</string>
+    <string name="loading_wait_4_response">서버 응답 대기 중…</string>
+
+    <!-- Server URLs -->
+    <string name="url_server">http://192.168.0.52:8080</string>
+    <string name="url_api">/api/file</string>
+    <string name="url_info">/info</string>
+    <string name="url_upload">/upload</string>
+
 </resources>

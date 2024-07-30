@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/scroll_view">
+    android:layout_height="match_parent">
 
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/transparent"
-        app:layout_constraintTop_toBottomOf="@+id/scroll_view"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        >
-
+        app:layout_constraintTop_toBottomOf="@+id/activity_main">
 
 
         <com.google.android.material.appbar.AppBarLayout
@@ -46,11 +43,8 @@
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="943dp"
-
-
+            android:layout_height="match_parent"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
-
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/main"
@@ -64,11 +58,62 @@
                     app:layout_constraintBottom_toBottomOf="parent">
 
                     <TextView
-                        android:id="@+id/textView"
+                        android:id="@+id/scaleHeader"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/text_margin"
                         android:layout_marginTop="@dimen/fab_margin"
+                        android:text="Scale"
+                        android:textColor="@android:color/primary_text_dark"
+                        android:textSize="36sp" />
+
+                    <RadioGroup
+                        android:id="@+id/scaleRadioGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/scaleDesc"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/text_margin"
+                            android:layout_marginBottom="@dimen/text_margin"
+                            android:text="스케일에 대한 설명"
+                            android:textSize="16sp" />
+
+                        <RadioButton
+                            android:id="@+id/radioScaleRoom"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/fab_margin"
+                            android:layout_marginBottom="@dimen/fab_margin"
+                            android:checked="true"
+                            android:text="Room"
+                            android:textSize="24sp" />
+
+                        <RadioButton
+                            android:id="@+id/radioScaleObject"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/fab_margin"
+                            android:layout_marginBottom="@dimen/fab_margin"
+                            android:text="Object"
+                            android:textSize="24sp" />
+
+
+                    </RadioGroup>
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="40sp" />
+
+                    <TextView
+                        android:id="@+id/durationHeader"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/text_margin"
                         android:text="촬영 시간"
                         android:textColor="@android:color/primary_text_dark"
                         android:textSize="36sp" />
@@ -124,7 +169,7 @@
                         android:layout_marginTop="40sp" />
 
                     <TextView
-                        android:id="@+id/textView2"
+                        android:id="@+id/qualityHeader"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/text_margin"

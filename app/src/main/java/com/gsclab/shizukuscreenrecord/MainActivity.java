@@ -23,7 +23,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.gsclab.shizukuscreenrecord.service.FileUpload;
+import com.gsclab.shizukuscreenrecord.service.HttpClient;
 import com.gsclab.shizukuscreenrecord.service.ScreenRecorder;
 import com.gsclab.shizukuscreenrecord.util.ShizukuUtil;
 
@@ -117,11 +117,11 @@ public class MainActivity extends AppCompatActivity {
 
     private final RadioGroup.OnCheckedChangeListener qualityClickListner = (radioGroup, i) -> {
         if (i == R.id.radioQualityHigh) {
-            FileUpload.quality = FileUpload.QUALITY.HIGH;
+            HttpClient.getInstance().quality = HttpClient.Quality.HIGH;
         } else if (i == R.id.radioQualityMiddle) {
-            FileUpload.quality = FileUpload.QUALITY.MIDDLE;
+            HttpClient.getInstance().quality = HttpClient.Quality.MIDDLE;
         } else if (i == R.id.radioQualityLow) {
-            FileUpload.quality = FileUpload.QUALITY.LOW;
+            HttpClient.getInstance().quality = HttpClient.Quality.LOW;
         }
     };
 
@@ -163,8 +163,8 @@ public class MainActivity extends AppCompatActivity {
                         REQ_PERMISSION_STORAGE
                 );
             }
-            File recordFile = new File(Environment.getExternalStorageDirectory().getPath() + "/", ScreenRecorder.getInstance().getFileName());
-            FileUpload.send2Server(recordFile, "http://192.168.0.52:8080/upload");
+            File recordFile = new File(Environment.getExternalStorageDirectory().getPath() + "/", ScreenRecorder.getFileName());
+            HttpClient.getInstance().sendFile2Server(recordFile, "http://192.168.0.52:8080/upload");
         } catch (Exception e) {
             e.printStackTrace();
         }

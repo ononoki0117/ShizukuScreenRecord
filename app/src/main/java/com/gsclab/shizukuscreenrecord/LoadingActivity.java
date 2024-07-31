@@ -64,7 +64,15 @@ public class LoadingActivity extends AppCompatActivity {
             @Override
             public void fileInfoUploadFailed(HttpClient httpClient) {
                 loadingText.setText(R.string.loading_wait_4_response);
-                //
+
+                try{
+                    loadingText.setText(R.string.loading_upload_file_info);
+                    HttpClient.getInstance().sendFileInfo2Server(getResources().getString(R.string.url_server)
+                            + getResources().getString(R.string.url_api)
+                            + getResources().getString(R.string.url_info));
+                } catch (JSONException e){
+                    loadingText.setText(e.getMessage());
+                }
             }
         });
 
@@ -76,5 +84,12 @@ public class LoadingActivity extends AppCompatActivity {
         } catch (JSONException e){
             Toast.makeText(this, "JSON ERROR;;;", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+
     }
 }

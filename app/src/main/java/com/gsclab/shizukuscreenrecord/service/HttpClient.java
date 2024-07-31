@@ -25,6 +25,7 @@ public class HttpClient {
 
     private final MediaType JSON = MediaType.get("application/json");
 
+    public Scale scale = Scale.ROOM;
     public Quality quality = Quality.HIGH;
 
     private HttpClient() {
@@ -46,18 +47,39 @@ public class HttpClient {
 
         private final String label;
 
-        Quality(String label){
+        Quality(String label) {
             this.label = label;
         }
 
-        public String getLabel(){
+        @Override
+        @NonNull
+        public String toString(){
+            return label;
+        }
+    }
+
+    public enum Scale {
+        ROOM("room"),
+        OBJECT("object");
+
+        private final String label;
+
+        Scale(String label) {
+            this.label = label;
+        }
+
+        @NonNull
+        @Override
+        public String toString(){
             return label;
         }
     }
 
     public void sendFile2Server(File file, String url) {
+
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
+
                 .addFormDataPart("files", file.getName(), RequestBody.create(MultipartBody.FORM, file))
                 .build();
 
@@ -84,7 +106,8 @@ public class HttpClient {
     public void sendFileInfo2Server(String url) throws JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("fileName", ScreenRecorder.getFileName());
-        jsonObject.put("quality", quality.getLabel());
+        jsonObject.put("quality", quality);
+        jsonObject.put("scale", scale);
 
         RequestBody requestBody = RequestBody.create(jsonObject.toString(), JSON);
 
@@ -110,14 +133,17 @@ public class HttpClient {
 
     public interface ResponseCallback {
         void fileUploadSucceed(HttpClient httpClient);
+
         void fileUploadFailed(HttpClient httpClient);
+
         void fileInfoUploadSucceed(HttpClient httpClient);
+
         void fileInfoUploadFailed(HttpClient httpClient);
     }
 
     private ResponseCallback responseCallback = null;
 
-    public void setResponseCallback(ResponseCallback responseCallback){
+    public void setResponseCallback(ResponseCallback responseCallback) {
         this.responseCallback = responseCallback;
     }
 }

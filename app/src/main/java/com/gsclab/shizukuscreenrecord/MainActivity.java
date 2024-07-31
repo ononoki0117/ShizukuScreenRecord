@@ -78,11 +78,14 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        RadioGroup scaleRadioGroup = (RadioGroup) findViewById(R.id.scaleRadioGroup);
+        scaleRadioGroup.setOnCheckedChangeListener(scaleClickListener);
+
         RadioGroup durationRadioGroup = (RadioGroup) findViewById(R.id.durationRadioGroup);
         durationRadioGroup.setOnCheckedChangeListener(durationClickListener);
 
         RadioGroup qualityRadioGroup = (RadioGroup) findViewById(R.id.qualityRadioGroup);
-        qualityRadioGroup.setOnCheckedChangeListener(qualityClickListner);
+        qualityRadioGroup.setOnCheckedChangeListener(qualityClickListener);
 
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -104,6 +107,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private final RadioGroup.OnCheckedChangeListener scaleClickListener = (radioGroup, i) -> {
+        if(i == R.id.radioScaleRoom){
+            HttpClient.getInstance().scale = HttpClient.Scale.ROOM;
+        } else if (i == R.id.radioScaleObject){
+            HttpClient.getInstance().scale = HttpClient.Scale.OBJECT;
+        }
+    };
+
     private final RadioGroup.OnCheckedChangeListener durationClickListener = (radioGroup, i) -> {
         if (i == R.id.radioDuration30) {
             ScreenRecorder.setDuration(30);
@@ -115,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
     };
 
 
-    private final RadioGroup.OnCheckedChangeListener qualityClickListner = (radioGroup, i) -> {
+    private final RadioGroup.OnCheckedChangeListener qualityClickListener = (radioGroup, i) -> {
         if (i == R.id.radioQualityHigh) {
             HttpClient.getInstance().quality = HttpClient.Quality.HIGH;
         } else if (i == R.id.radioQualityMiddle) {

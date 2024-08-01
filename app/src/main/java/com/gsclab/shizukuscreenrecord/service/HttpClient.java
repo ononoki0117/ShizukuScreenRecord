@@ -10,6 +10,8 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -25,7 +27,7 @@ public class HttpClient {
 
     private final MediaType JSON = MediaType.get("application/json");
 
-    public Scale scale = Scale.ROOM;
+    public Scope scope = Scope.ROOM;
     public Quality quality = Quality.HIGH;
 
     private HttpClient() {
@@ -58,13 +60,13 @@ public class HttpClient {
         }
     }
 
-    public enum Scale {
+    public enum Scope {
         ROOM("room"),
         OBJECT("object");
 
         private final String label;
 
-        Scale(String label) {
+        Scope(String label) {
             this.label = label;
         }
 
@@ -75,12 +77,17 @@ public class HttpClient {
         }
     }
 
-    public void sendFile2Server(File file, String url) {
+    public void sendFile2Server(File file, String url) throws JSONException{
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("filename", ScreenRecorder.getFileName());
+        jsonObject.put("quality", quality);
+        jsonObject.put("scope", scope);
+        jsonObject.put("styletransfer", false);
 
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
-
-                .addFormDataPart("files", file.getName(), RequestBody.create(MultipartBody.FORM, file))
+                .addFormDataPart("files", file.getName(), RequestBody.create(MediaType.parse("application/octet-stream"), file))
+                .addFormDataPart("info", jsonObject.toString(), RequestBody.create(jsonObject.toString(), JSON))
                 .build();
 
         Request request = new Request.Builder()
@@ -98,47 +105,83 @@ public class HttpClient {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 Log.d("Response", response.body().string());
+
                 responseCallback.fileUploadSucceed(HttpClient.getInstance());
             }
         });
     }
 
-    public void sendFileInfo2Server(String url) throws JSONException {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("fileName", ScreenRecorder.getFileName());
-        jsonObject.put("quality", quality);
-        jsonObject.put("scale", scale);
-
-        RequestBody requestBody = RequestBody.create(jsonObject.toString(), JSON);
-
+    public void remoteExecution(String filename, String url){
         Request request = new Request.Builder()
-                .url(url)
-                .post(requestBody)
+                .url(url + "/" + filename)
+                .get()
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                Log.e("File Info Upload Failed", e.toString());
-                responseCallback.fileInfoUploadFailed(HttpClient.getInstance());
+                Log.e("Execute failed", e.toString());
+                responseCallback.executionFailed(HttpClient.getInstance());
             }
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                Log.d("File Info Upload Response", response.message());
-                responseCallback.fileInfoUploadSucceed(HttpClient.getInstance());
+                Log.d("Execute Response", response.body().string());
+                responseCallback.executionSucceed(HttpClient.getInstance());
             }
         });
     }
 
+    public void pollingStatus(String filename, String url){
+        Request request = new Request.Builder()
+                .url(url + "/" + filename)
+                .get()
+                .build();
+
+        Timer timer = new Timer();
+
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                        Log.e("Polling Failed", e.toString());
+                    }
+
+                    @Override
+                    public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+
+                        try {
+                            JSONObject jsonObject = new JSONObject(response.body().string());
+                            String message = jsonObject.getString("message");
+
+                            if(message.equals("done")){
+                                Log.i("Polling Ended", jsonObject.toString());
+                                String url = jsonObject.getString("url");
+                                responseCallback.executionEnded(HttpClient.getInstance(), url, timer);
+                            }
+                            else {
+                                Log.i("Polling Not Ended", jsonObject.toString());
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        };
+
+
+        timer.schedule(timerTask, 1000, 10000);
+    }
+
     public interface ResponseCallback {
         void fileUploadSucceed(HttpClient httpClient);
-
         void fileUploadFailed(HttpClient httpClient);
-
-        void fileInfoUploadSucceed(HttpClient httpClient);
-
-        void fileInfoUploadFailed(HttpClient httpClient);
+        void executionSucceed(HttpClient httpClient);
+        void executionFailed(HttpClient httpClient);
+        void executionEnded(HttpClient httpClient, String url, Timer timer);
     }
 
     private ResponseCallback responseCallback = null;

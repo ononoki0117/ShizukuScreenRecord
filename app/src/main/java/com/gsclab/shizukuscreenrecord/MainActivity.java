@@ -109,9 +109,9 @@ public class MainActivity extends AppCompatActivity {
 
     private final RadioGroup.OnCheckedChangeListener scaleClickListener = (radioGroup, i) -> {
         if(i == R.id.radioScaleRoom){
-            HttpClient.getInstance().scale = HttpClient.Scale.ROOM;
+            HttpClient.getInstance().scope = HttpClient.Scope.ROOM;
         } else if (i == R.id.radioScaleObject){
-            HttpClient.getInstance().scale = HttpClient.Scale.OBJECT;
+            HttpClient.getInstance().scope = HttpClient.Scope.OBJECT;
         }
     };
 

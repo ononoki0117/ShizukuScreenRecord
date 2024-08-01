@@ -114,13 +114,15 @@
     <string name="loading_ready">업로드 준비 중…</string>
     <string name="loading_upload_file_info">파일 정보 업로드 중…</string>
     <string name="loading_upload_file">파일 업로드 중…</string>
+    <string name="loading_wait_4_start_processing">3D 모델 생성 대기 중...</string>
     <string name="loading_wait_4_processing">3D 모델 생성 중…</string>
     <string name="loading_wait_4_response">서버 응답 대기 중…</string>
+    <string name="loading_json_error">JSON ERROR...</string>
 
     <!-- Server URLs -->
     <string name="url_server">http://192.168.0.52:8080</string>
-    <string name="url_api">/api/file</string>
-    <string name="url_info">/info</string>
-    <string name="url_upload">/upload</string>
+    <string name="url_upload">/api/upload/file</string>
+    <string name="url_execute">/api/execute</string>
+    <string name="url_status">/api/status</string>
 
 </resources>

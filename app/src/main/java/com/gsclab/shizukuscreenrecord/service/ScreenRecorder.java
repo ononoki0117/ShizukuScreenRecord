@@ -53,7 +53,7 @@ public class ScreenRecorder {
         return filePresent;
     }
 
-    private String fileName = "test.mp4";
+    private String fileName;
 
     public static String getFileName() {
         return ScreenUtilHelper.INSTANCE.fileName;

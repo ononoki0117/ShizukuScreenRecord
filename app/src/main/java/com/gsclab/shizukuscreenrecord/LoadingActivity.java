@@ -1,9 +1,10 @@
 package com.gsclab.shizukuscreenrecord;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import com.gsclab.shizukuscreenrecord.service.ScreenRecorder;
 import org.json.JSONException;
 
 import java.io.File;
+import java.util.Timer;
 
 public class LoadingActivity extends AppCompatActivity {
     private TextView loadingText;
@@ -43,53 +45,62 @@ public class LoadingActivity extends AppCompatActivity {
         HttpClient.getInstance().setResponseCallback(new HttpClient.ResponseCallback() {
             @Override
             public void fileUploadSucceed(HttpClient httpClient) {
-                loadingText.setText(R.string.loading_wait_4_processing);
+                loadingText.setText(R.string.loading_wait_4_start_processing);
+                HttpClient.getInstance().remoteExecution(
+                        ScreenRecorder.getFileName(),
+                        getResources().getString(R.string.url_server) + getResources().getString(R.string.url_execute));
             }
 
             @Override
             public void fileUploadFailed(HttpClient httpClient) {
                 loadingText.setText(R.string.loading_wait_4_response);
-            }
+                try {
+                    File recordFile = new File(Environment.getExternalStorageDirectory().getPath() + "/", ScreenRecorder.getFileName());
 
-            @Override
-            public void fileInfoUploadSucceed(HttpClient httpClient) {
-                loadingText.setText(R.string.loading_upload_file);
+                    HttpClient.getInstance().sendFile2Server(recordFile, getResources().getString(R.string.url_server)
+                            + getResources().getString(R.string.url_upload));
 
-                File recordFile = new File(Environment.getExternalStorageDirectory().getPath() + "/", ScreenRecorder.getFileName());
-                httpClient.sendFile2Server(recordFile, getResources().getString(R.string.url_server)
-                        + getResources().getString(R.string.url_api)
-                        + getResources().getString(R.string.url_upload));
-            }
-
-            @Override
-            public void fileInfoUploadFailed(HttpClient httpClient) {
-                loadingText.setText(R.string.loading_wait_4_response);
-
-                try{
-                    loadingText.setText(R.string.loading_upload_file_info);
-                    HttpClient.getInstance().sendFileInfo2Server(getResources().getString(R.string.url_server)
-                            + getResources().getString(R.string.url_api)
-                            + getResources().getString(R.string.url_info));
-                } catch (JSONException e){
-                    loadingText.setText(e.getMessage());
+                } catch (JSONException e) {
+                    loadingText.setText(R.string.loading_json_error);
                 }
+            }
+
+            @Override
+            public void executionSucceed(HttpClient httpClient) {
+                loadingText.setText(R.string.loading_wait_4_processing);
+                HttpClient.getInstance().pollingStatus(ScreenRecorder.getFileName(), getResources().getString(R.string.url_server) + getResources().getString(R.string.url_status));
+            }
+
+            @Override
+            public void executionFailed(HttpClient httpClient) {
+                loadingText.setText(R.string.loading_wait_4_response);
+                HttpClient.getInstance().remoteExecution(ScreenRecorder.getFileName(), getResources().getString(R.string.url_server) + getResources().getString(R.string.url_execute));
+            }
+
+            @Override
+            public void executionEnded(HttpClient httpClient, String url, Timer timer) {
+                timer.cancel();
+
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(browserIntent);
+
             }
         });
 
-        try{
+        try {
             loadingText.setText(R.string.loading_upload_file_info);
-            HttpClient.getInstance().sendFileInfo2Server(getResources().getString(R.string.url_server)
-                    + getResources().getString(R.string.url_api)
-                    + getResources().getString(R.string.url_info));
-        } catch (JSONException e){
-            Toast.makeText(this, "JSON ERROR;;;", Toast.LENGTH_SHORT).show();
+            File recordFile = new File(Environment.getExternalStorageDirectory().getPath() + "/", ScreenRecorder.getFileName());
+
+            HttpClient.getInstance().sendFile2Server(recordFile, getResources().getString(R.string.url_server)
+                    + getResources().getString(R.string.url_upload));
+
+        } catch (JSONException e) {
+            loadingText.setText(R.string.loading_json_error);
         }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-
     }
 }

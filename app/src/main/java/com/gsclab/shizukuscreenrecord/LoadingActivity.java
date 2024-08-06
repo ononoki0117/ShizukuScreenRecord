@@ -68,7 +68,10 @@ public class LoadingActivity extends AppCompatActivity {
             @Override
             public void executionSucceed(HttpClient httpClient) {
                 loadingText.setText(R.string.loading_wait_4_processing);
-                HttpClient.getInstance().pollingStatus(ScreenRecorder.getFileName(), getResources().getString(R.string.url_server) + getResources().getString(R.string.url_status));
+                Intent intent = new Intent (getApplicationContext(), EmptyActivity.class);
+                startActivity(intent);
+
+                //HttpClient.getInstance().pollingStatus(ScreenRecorder.getFileName(), getResources().getString(R.string.url_server) + getResources().getString(R.string.url_status));
             }
 
             @Override

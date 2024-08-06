@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">서비스 이름 미정!</string>
+    <string name="app_name">니ᅀᅥ</string>
     <string name="title_activity_test">test</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
@@ -120,9 +120,11 @@
     <string name="loading_json_error">JSON ERROR...</string>
 
     <!-- Server URLs -->
-    <string name="url_server">http://192.168.0.52:8080</string>
+    <string name="url_server">http://203.253.4.3:3000</string>
     <string name="url_upload">/api/upload/file</string>
     <string name="url_execute">/api/execute</string>
     <string name="url_status">/api/status</string>
+
+    <string name="url_ply">https://gsclab.kr/ply</string>
 
 </resources>

@@ -27,8 +27,6 @@ import com.gsclab.shizukuscreenrecord.service.HttpClient;
 import com.gsclab.shizukuscreenrecord.service.ScreenRecorder;
 import com.gsclab.shizukuscreenrecord.util.ShizukuUtil;
 
-import java.io.File;
-
 import rikka.shizuku.Shizuku;
 
 public class MainActivity extends AppCompatActivity {
@@ -136,50 +134,6 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    public void onClickRecord(View v) {
-        if (ShizukuUtil.checkPermission(REQUEST_CODE_BUTTON1)) {
-            Log.d("checkPermission", "Permission checked");
-        } else {
-            Toast.makeText(this, "Permission Not Checked", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        ScreenRecorder.getInstance().startRecordWithToast(this);
-    }
-
-    public void onClickStop(View v) {
-        if (ShizukuUtil.checkPermission(REQUEST_CODE_BUTTON1)) {
-            Log.d("checkPermission", "Permission checked");
-        } else {
-            Toast.makeText(this, "Permission Not Checked", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        ScreenRecorder.getInstance().stopRecordWithToast(this);
-    }
-
-    public void onClickSend(View v) {
-        if (!ScreenRecorder.getInstance().isFilePresent()) {
-            Toast.makeText(this, "Record File does not exist!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        try {
-            int permission = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-            if (permission != PackageManager.PERMISSION_GRANTED) {
-                // We don't have permission so prompt the user
-                ActivityCompat.requestPermissions(
-                        this,
-                        PERMISSIONS_STORAGE,
-                        REQ_PERMISSION_STORAGE
-                );
-            }
-            File recordFile = new File(Environment.getExternalStorageDirectory().getPath() + "/", ScreenRecorder.getFileName());
-            HttpClient.getInstance().sendFile2Server(recordFile, "http://192.168.0.52:8080/upload");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     public void onClickStartRecord(View v) {
         if (ShizukuUtil.checkPermission(REQUEST_CODE_BUTTON1)) {

@@ -77,7 +77,7 @@ public class RecordingActivity extends AppCompatActivity {
 
     private void changeActivity() {
         Intent intent = new Intent(getApplicationContext(), LoadingActivity.class);
-        finishAffinity();
+        //finishAffinity();
         startActivity(intent);
     }
 }

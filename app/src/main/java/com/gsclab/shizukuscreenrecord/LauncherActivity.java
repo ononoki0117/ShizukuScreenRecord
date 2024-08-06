@@ -34,7 +34,7 @@ public class LauncherActivity extends AppCompatActivity {
     }
 
     public void onClickToWeb(View v){
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"));
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://gsclab.kr/ply"));
         startActivity(browserIntent);
     }
 

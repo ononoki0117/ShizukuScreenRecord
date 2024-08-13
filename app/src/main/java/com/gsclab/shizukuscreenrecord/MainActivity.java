@@ -85,6 +85,9 @@ public class MainActivity extends AppCompatActivity {
         RadioGroup qualityRadioGroup = (RadioGroup) findViewById(R.id.qualityRadioGroup);
         qualityRadioGroup.setOnCheckedChangeListener(qualityClickListener);
 
+        RadioGroup styleRadioGroup = (RadioGroup) findViewById(R.id.styleRadioGroup);
+        styleRadioGroup.setOnCheckedChangeListener(styleClickListener);
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -114,10 +117,10 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private final RadioGroup.OnCheckedChangeListener durationClickListener = (radioGroup, i) -> {
-        if (i == R.id.radioDuration30) {
-            ScreenRecorder.setDuration(30);
-        } else if (i == R.id.radioDuration20) {
+        if (i == R.id.radioDuration20) {
             ScreenRecorder.setDuration(20);
+        } else if (i == R.id.radioDuration15) {
+            ScreenRecorder.setDuration(15);
         } else if (i == R.id.radioDuration10) {
             ScreenRecorder.setDuration(10);
         }
@@ -131,6 +134,14 @@ public class MainActivity extends AppCompatActivity {
             HttpClient.getInstance().quality = HttpClient.Quality.MIDDLE;
         } else if (i == R.id.radioQualityLow) {
             HttpClient.getInstance().quality = HttpClient.Quality.LOW;
+        }
+    };
+
+    private final RadioGroup.OnCheckedChangeListener styleClickListener = (radioGroup, i) -> {
+        if (i == R.id.styleTrue) {
+            HttpClient.getInstance().isTransfer = true;
+        } else if (i == R.id.styleFalse) {
+            HttpClient.getInstance().isTransfer = false;
         }
     };
 

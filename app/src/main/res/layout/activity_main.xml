@@ -79,7 +79,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/text_margin"
                             android:layout_marginBottom="@dimen/text_margin"
-                            android:text="스케일에 대한 설명"
+                            android:text="@string/desc_scale"
                             android:textSize="16sp" />
 
                         <RadioButton
@@ -130,18 +130,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/text_margin"
                             android:layout_marginBottom="@dimen/text_margin"
-                            android:text="촬영 시간에 대한 설명"
+                            android:text="@string/desc_time"
                             android:textSize="16sp" />
-
-                        <RadioButton
-                            android:id="@+id/radioDuration30"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/fab_margin"
-                            android:layout_marginBottom="@dimen/fab_margin"
-                            android:checked="true"
-                            android:text="30초"
-                            android:textSize="24sp" />
 
                         <RadioButton
                             android:id="@+id/radioDuration20"
@@ -149,7 +139,17 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/fab_margin"
                             android:layout_marginBottom="@dimen/fab_margin"
+                            android:checked="true"
                             android:text="20초"
+                            android:textSize="24sp" />
+
+                        <RadioButton
+                            android:id="@+id/radioDuration15"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/fab_margin"
+                            android:layout_marginBottom="@dimen/fab_margin"
+                            android:text="15초"
                             android:textSize="24sp" />
 
                         <RadioButton
@@ -188,7 +188,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/text_margin"
                             android:layout_marginBottom="@dimen/text_margin"
-                            android:text="변환 퀄리티에 대한 설명"
+                            android:text="@string/desc_quality"
                             android:textSize="16sp" />
 
                         <RadioButton
@@ -220,6 +220,56 @@
                             android:textSize="24sp" />
 
                     </RadioGroup>
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="40sp" />
+
+                    <TextView
+                        android:id="@+id/styleHeader"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/text_margin"
+                        android:text="스타일 트랜스퍼"
+                        android:textColor="@android:color/primary_text_dark_nodisable"
+                        android:textSize="36sp" />
+
+                    <RadioGroup
+                        android:id="@+id/styleRadioGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/styleDesc"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/text_margin"
+                            android:layout_marginBottom="@dimen/text_margin"
+                            android:text="@string/desc_transfer"
+                            android:textSize="16sp" />
+
+                        <RadioButton
+                            android:id="@+id/styleTrue"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/fab_margin"
+                            android:layout_marginBottom="@dimen/fab_margin"
+                            android:checked="true"
+                            android:text="True"
+                            android:textSize="24sp" />
+
+                        <RadioButton
+                            android:id="@+id/styleFalse"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/fab_margin"
+                            android:layout_marginBottom="@dimen/fab_margin"
+                            android:text="False"
+                            android:textSize="24sp" />
+
+                    </RadioGroup>
+
 
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/startRecord"

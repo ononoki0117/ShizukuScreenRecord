@@ -120,11 +120,16 @@
     <string name="loading_json_error">JSON ERROR...</string>
 
     <!-- Server URLs -->
-    <string name="url_server">http://203.253.4.3:3000</string>
+    <string name="url_server">http://203.253.4.3:80</string>
     <string name="url_upload">/api/upload/file</string>
     <string name="url_execute">/api/execute</string>
     <string name="url_status">/api/status</string>
 
     <string name="url_ply">https://gsclab.kr/ply</string>
 
+    <!-- Desc -->
+    <string name="desc_scale">HMD 체험 공간 또는 촬영 대상의 크기</string>
+    <string name="desc_time">10 ~ 20초 사이 시간 지정</string>
+    <string name="desc_quality">상위 옵션 선택시 시간 지연</string>
+    <string name="desc_transfer">옵션 지정시 한국화풍으로 변환 </string>
 </resources>

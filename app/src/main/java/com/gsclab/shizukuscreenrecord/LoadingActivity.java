@@ -39,6 +39,8 @@ public class LoadingActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+
+
         loadingText = (TextView) findViewById(R.id.loadingInfoTextView);
         loadingText.setText(R.string.loading_ready);
 

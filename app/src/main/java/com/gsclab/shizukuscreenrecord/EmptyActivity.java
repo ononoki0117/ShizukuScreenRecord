@@ -15,7 +15,7 @@ import com.gsclab.shizukuscreenrecord.service.ScreenRecorder;
 public class EmptyActivity extends AppCompatActivity {
     private TextView loadingText;
 
-
+    private boolean isWebOpen = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +23,10 @@ public class EmptyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_empty);
 
         loadingText = (TextView) findViewById(R.id.emptyInfoTextView);
+
+        String filename = ScreenRecorder.getFileName().replace(".mp4", "");
+
+        HttpClient.getInstance().pollingStatus(filename, getResources().getString(R.string.url_server) + getResources().getString(R.string.url_status));
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -35,6 +39,13 @@ public class EmptyActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         loadingText.setText(R.string.loading_wait_4_processing);
-        HttpClient.getInstance().pollingStatus(ScreenRecorder.getFileName(), getResources().getString(R.string.url_server) + getResources().getString(R.string.url_status));
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        finishAffinity();
+        System.runFinalization();
+        System.exit(0);
     }
 }

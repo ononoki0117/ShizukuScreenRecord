@@ -29,6 +29,7 @@ public class HttpClient {
 
     public Scope scope = Scope.ROOM;
     public Quality quality = Quality.HIGH;
+    public boolean isTransfer = true;
 
     private HttpClient() {
         client = new OkHttpClient();
@@ -82,7 +83,7 @@ public class HttpClient {
         jsonObject.put("filename", ScreenRecorder.getFileName());
         jsonObject.put("quality", quality);
         jsonObject.put("scope", scope);
-        jsonObject.put("styletransfer", false);
+        jsonObject.put("styletransfer", isTransfer);
 
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)

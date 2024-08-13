@@ -1,5 +1,8 @@
 package com.gsclab.shizukuscreenrecord.service;
 
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
@@ -113,6 +116,9 @@ public class ScreenRecorder {
         IToastNotify notifyEnd = () -> activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                Ringtone r = RingtoneManager.getRingtone(activity.getApplicationContext(), notification);
+                r.play();
                 Toast.makeText(activity, "Record End!", Toast.LENGTH_LONG).show();
             }
         });

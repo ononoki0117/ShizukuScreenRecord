@@ -48,7 +48,7 @@ public class ScreenRecorder {
         ScreenUtilHelper.INSTANCE.duration = duration;
     }
 
-    public int duration = 30;
+    public int duration = 20;
 
     private boolean filePresent = false;
 

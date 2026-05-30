@@ -1,12 +1,7 @@
 *.iml
 .gradle
 /local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
+.idea/
 .DS_Store
 /build
 /captures
@@ -14,3 +9,16 @@
 .cxx
 local.properties
 /app/release
+
+# Local secrets and signing material
+*.keystore
+*.jks
+*.p12
+*.pem
+*.cer
+*.crt
+*.key
+*.env
+*.env.*
+secrets.properties
+keystore.properties
